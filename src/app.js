@@ -1,23 +1,22 @@
 const root = document.querySelector("#root");
 
 function App() {
-  // sebenarnya bisa pake getElementById, hanya karena sudah pernah belajar useRef untuk manipulasi DOM JS, jadi kita menggunakan useRef
-  const namaRef = React.useRef(null);
+  const [name, setName] = React.useState("");
 
   const submit = (event) => {
     event.preventDefault();
 
-    // sama aja kaya vanillaJs = namaRef.target.value
-    const nama = namaRef.current.value;
-    console.log(`Nama ${nama}`);
+    console.log(`Nama: ${name}`);
   };
   return (
     <>
       <form onSubmit={submit}>
         <div>
-          <label>Nama Anda: </label>
-          {/* jangan lupa deklarasikan ref */}
-          <input type="text" name="nama" ref={namaRef} />
+          <label>Nama: </label>
+          {/* ini namanya controlled component, kita bikin state dan set state-nya berdasarkan input value, store, lalu diakses isi dari value dari input tersebut */}
+
+          <input type="text" name="nama" value={name} onChange={(event) => setName(event.target.value)} />
+          {/* JANGAN LUPA gunakan value={name}, agar value-nya bergantung pada state */}
         </div>
         <input type="submit" value="Kirim" />
       </form>
