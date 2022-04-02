@@ -1,25 +1,23 @@
 const root = document.querySelector("#root");
 
 function App() {
-  const [name, setName] = React.useState("");
+  React.useEffect(() => {
+    // promise ada 2 kemungkinan, reject atau resolve
+    // reject kalo ada masalah di server, error 500, dll selain 200
+    // resolve responya 200
+    const getData = fetch("https://api.spaceflightnewsapi.net/v3/blogs")
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        console.log(res);
+      });
 
-  const submit = (event) => {
-    event.preventDefault();
-
-    console.log(`Nama: ${name}`);
-  };
+    console.log(getData);
+  }, []);
   return (
     <>
-      <form onSubmit={submit}>
-        <div>
-          <label>Nama: </label>
-          {/* ini namanya controlled component, kita bikin state dan set state-nya berdasarkan input value, store, lalu diakses isi dari value dari input tersebut */}
-
-          <input type="text" name="nama" value={name} onChange={(event) => setName(event.target.value)} />
-          {/* JANGAN LUPA gunakan value={name}, agar value-nya bergantung pada state */}
-        </div>
-        <input type="submit" value="Kirim" />
-      </form>
+      <h1>Data Fetch</h1>
     </>
   );
 }
