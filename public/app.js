@@ -1,14 +1,10 @@
 const root = document.querySelector("#root");
 
 function App() {
-  const [count, setCount] = React.useState(0);
-  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
-    onClick: () => setCount(count + 1)
-  }, "+"), /*#__PURE__*/React.createElement("button", {
-    onClick: () => setCount(count - 1)
-  }, "-"), /*#__PURE__*/React.createElement("p", null, "hasil: ", count, " "), /*#__PURE__*/React.createElement("button", {
-    onClick: () => setCount(0)
-  }, "Reset"));
+  const [login, setLogin] = React.useState(false);
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h1", null, "Login Dulu!"), /*#__PURE__*/React.createElement("p", null, " ", login && "Saya sudah login"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setLogin(true)
+  }, "Login"));
 }
 
 ReactDOM.render( /*#__PURE__*/React.createElement(App, null), root);
