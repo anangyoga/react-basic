@@ -1,18 +1,25 @@
 const root = document.querySelector("#root");
 
 function App() {
+  // async await pada reactJs digunakan di useEffect
+  const [news, setNews] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
   React.useEffect(() => {
-    // promise ada 2 kemungkinan, reject atau resolve
-    // reject kalo ada masalah di server, error 500, dll selain 200
-    // resolve responya 200
-    const getData = fetch("https://api.spaceflightnewsapi.net/v3/blogs").then(res => {
-      return res.json();
-    }).then(res => {
-      console.log(res);
-    });
-    console.log(getData);
+    async function getData() {
+      const request = await fetch("https://api.spaceflightnewsapi.net/v3/blogs");
+      const response = await request.json();
+      setNews(response);
+      setLoading(false);
+    }
+
+    getData();
   }, []);
-  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h1", null, "Data Fetch"));
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h1", null, "Data Fetch"), loading ? /*#__PURE__*/React.createElement("i", null, "Loading data ...") : /*#__PURE__*/React.createElement("ul", null, news.map(item => {
+    console.log(item);
+    return /*#__PURE__*/React.createElement("li", {
+      key: item.id
+    }, item.id, " - ", item.title, " : ", item.newsSite);
+  })));
 }
 
 ReactDOM.render( /*#__PURE__*/React.createElement(App, null), root);

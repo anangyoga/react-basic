@@ -1,23 +1,39 @@
 const root = document.querySelector("#root");
 
 function App() {
-  React.useEffect(() => {
-    // promise ada 2 kemungkinan, reject atau resolve
-    // reject kalo ada masalah di server, error 500, dll selain 200
-    // resolve responya 200
-    const getData = fetch("https://api.spaceflightnewsapi.net/v3/blogs")
-      .then((res) => {
-        return res.json();
-      })
-      .then((res) => {
-        console.log(res);
-      });
+  // async await pada reactJs digunakan di useEffect
 
-    console.log(getData);
+  const [news, setNews] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    async function getData() {
+      const request = await fetch("https://api.spaceflightnewsapi.net/v3/blogs");
+
+      const response = await request.json();
+      setNews(response);
+      setLoading(false);
+    }
+
+    getData();
   }, []);
   return (
     <>
       <h1>Data Fetch</h1>
+      {loading ? (
+        <i>Loading data ...</i>
+      ) : (
+        <ul>
+          {news.map((item) => {
+            console.log(item);
+            return (
+              <li key={item.id}>
+                {item.id} - {item.title} : {item.newsSite}
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </>
   );
 }
