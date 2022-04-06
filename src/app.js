@@ -1,39 +1,37 @@
 const root = document.querySelector("#root");
 
 function App() {
-  // async await pada reactJs digunakan di useEffect
+  // 1. buat eventlistener dengan state
+  // 2. buat onChange pada input dengan event, set value untuk buat controlled component
+  // 3. buat function handler pada form & eventPreventDefault(), log activity
+  // 4. setelah dapet log activity, push ke array dengan membuat state  todo, buat state dgn empty array
+  // 5. buat state todo dengan useState empty array, setTodos dan masukkin activity ke array. activity kan apa yang mau dirender ulang, dan dia adalah array jadi setTodos([activity]), jadi ketika disubmit akan masuk ke state activity, log todos
+  // 6. map pada komponen yg ditampilkan FE
+  // 7. setTodos([activity]) array ini hanya menghapus array yang lama, bukan mempertahankan data lama dan menambahkan data baru. PRINSIP STATE: ketika diset, dia akan mengganti data yang lama. makannya harus dimanipulasi.
+  // 8. gunakan Spread Operator utnuk ekstrak semua elemen di dalam array todos ke dalam array baru pada setTodos. ibaratnya ini data lama ditambah data baru
 
-  const [news, setNews] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
+  const [activity, setActivity] = React.useState("");
+  const [todos, setTodos] = React.useState([]);
 
-  React.useEffect(() => {
-    async function getData() {
-      const request = await fetch("https://api.spaceflightnewsapi.net/v3/blogs");
+  const addTodoHandler = (event) => {
+    event.preventDefault();
 
-      const response = await request.json();
-      setNews(response);
-      setLoading(false);
-    }
+    setTodos([...todos, activity]);
+    setActivity("");
+  };
 
-    getData();
-  }, []);
   return (
     <>
-      <h1>Data Fetch</h1>
-      {loading ? (
-        <i>Loading data ...</i>
-      ) : (
+      <h1>Todo List</h1>
+      <form onSubmit={addTodoHandler}>
+        <input value={activity} type="text" placeholder="add activity .." onChange={(event) => setActivity(event.target.value)} />
+        <button type="submit">Add</button>
         <ul>
-          {news.map((item) => {
-            console.log(item);
-            return (
-              <li key={item.id}>
-                {item.id} - {item.title} : {item.newsSite}
-              </li>
-            );
-          })}
+          {todos.map((todo) => (
+            <li>{todo}</li>
+          ))}
         </ul>
-      )}
+      </form>
     </>
   );
 }
