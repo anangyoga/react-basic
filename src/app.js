@@ -1,23 +1,39 @@
 const root = document.querySelector("#root");
 
 function App() {
-  // 1. buat eventlistener dengan state
-  // 2. buat onChange pada input dengan event, set value untuk buat controlled component
-  // 3. buat function handler pada form & eventPreventDefault(), log activity
-  // 4. setelah dapet log activity, push ke array dengan membuat state  todo, buat state dgn empty array
-  // 5. buat state todo dengan useState empty array, setTodos dan masukkin activity ke array. activity kan apa yang mau dirender ulang, dan dia adalah array jadi setTodos([activity]), jadi ketika disubmit akan masuk ke state activity, log todos
-  // 6. map pada komponen yg ditampilkan FE
-  // 7. setTodos([activity]) array ini hanya menghapus array yang lama, bukan mempertahankan data lama dan menambahkan data baru. PRINSIP STATE: ketika diset, dia akan mengganti data yang lama. makannya harus dimanipulasi.
-  // 8. gunakan Spread Operator utnuk ekstrak semua elemen di dalam array todos ke dalam array baru pada setTodos. ibaratnya ini data lama ditambah data baru
+  // 1. buat function untuk generate ID
+  // 2. ganti activity pada setTodos menjadi multi-dimensional array
+  // 3. pada mapping <li>{todo}</li> itu tidak bisa dirender karena bentuknya object, maka harus ditembak ke propertinya jadi <li>{todo.activity}</li>, tambahkan juga todo.id
+  // 4. buat onClick={removeHandler}
+  // 5. gunakan parameter todoId untuk nembak Id yang akan dihapus
+  // 6. fungsi hapus menggunakan filter, jadi kalau todo.id !== todoId, masukkan ke setTodos(filteredTodos)
 
   const [activity, setActivity] = React.useState("");
   const [todos, setTodos] = React.useState([]);
 
+  const generateID = () => {
+    return Date.now();
+  };
+
   const addTodoHandler = (event) => {
     event.preventDefault();
 
-    setTodos([...todos, activity]);
+    setTodos([
+      ...todos,
+      {
+        id: generateID(),
+        activity,
+      },
+    ]);
     setActivity("");
+  };
+
+  const removeTodoHandler = (todoId) => {
+    const filteredTodos = todos.filter((todo) => {
+      return todo.id !== todoId;
+    });
+
+    setTodos(filteredTodos);
   };
 
   return (
@@ -28,7 +44,10 @@ function App() {
         <button type="submit">Add</button>
         <ul>
           {todos.map((todo) => (
-            <li>{todo}</li>
+            <li key={todo.id}>
+              {todo.activity}
+              <button onClick={removeTodoHandler.bind(this, todo.id)}>X</button>
+            </li>
           ))}
         </ul>
       </form>
